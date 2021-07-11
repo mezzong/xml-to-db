@@ -4,9 +4,10 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 public interface Parser {
 
-    public Element getRootElement() throws IOException, SAXException;
+    Element getRootElement(InputStream inputStream) throws IOException, SAXException;
 
 }

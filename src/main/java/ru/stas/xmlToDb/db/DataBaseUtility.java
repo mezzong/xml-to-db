@@ -1,6 +1,9 @@
 package ru.stas.xmlToDb.db;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.stas.xmlToDb.controller.FileController;
 
 import java.io.InputStream;
 import java.util.Properties;
@@ -8,17 +11,18 @@ import java.util.Properties;
 
 public class DataBaseUtility {
     private static BasicDataSource dataSource;
+    private static final Logger LOG = LoggerFactory.getLogger(FileController.class.getName());
+
 
     public static BasicDataSource getDataSource() {
-
         if (dataSource == null) {
             BasicDataSource ds = new BasicDataSource();
             Properties prs = new Properties();
             ClassLoader classLoader = DataBaseUtility.class.getClassLoader();
-            try (InputStream in = classLoader.getResourceAsStream("app.properties")) {
+            try (InputStream in = classLoader.getResourceAsStream("application.properties")) {
                 prs.load(in);
             } catch (Exception e) {
-                e.printStackTrace();
+                LOG.error("Exception in BasicDataSource", e);
             }
             ds.setUrl(prs.getProperty("url"));
             ds.setUsername(prs.getProperty("login"));

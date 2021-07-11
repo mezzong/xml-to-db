@@ -1,30 +1,22 @@
 package ru.stas.xmlToDb;
 
-import org.xml.sax.SAXException;
-import ru.stas.xmlToDb.converter.OrganizationConverter;
-import ru.stas.xmlToDb.model.Organization;
-import ru.stas.xmlToDb.parsers.XmlParser;
-import ru.stas.xmlToDb.repositories.OrganizationRepository;
-import ru.stas.xmlToDb.repositories.Repository;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-
+@SpringBootApplication
 public class Main {
-    public static void main(String[] args)
-            throws ParserConfigurationException, IOException, SAXException {
-        File xmlFile = new File("test.xml");
-        XmlParser xmlParser = new XmlParser(xmlFile);
-        OrganizationConverter converter = new OrganizationConverter();
-        Map<Integer, Organization> organizations =
-                converter.convert(xmlParser.getRootElement().getElementsByTagName("organization"));
-        Repository repository = new OrganizationRepository();
-        repository.insertBatchOrganizations(organizations);
-        List<Organization> allEl = repository.findAll();
-        System.out.println(allEl.size());
+    public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
+    }
+
+    @Bean
+    public FreeMarkerViewResolver freemarkerViewResolver() {
+        FreeMarkerViewResolver resolver = new FreeMarkerViewResolver();
+        resolver.setCache(true);
+        resolver.setPrefix("");
+        resolver.setSuffix(".ftl");
+        return resolver;
     }
 }
